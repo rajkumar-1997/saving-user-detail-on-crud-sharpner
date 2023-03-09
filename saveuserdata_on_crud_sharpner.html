@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>storing user data</title>
+</head>
+
+<body>
+
+    <form  onsubmit="addUser(event)" >
+       
+        <label >Name</label>
+        <input type="text" id="name" name="myname" placeholder="Enter Name">
+
+
+        <label>Email</label>
+        <input type="email" name="myemail" placeholder="Enter Email">
+
+
+        <label>Mob No</label>
+        <input type="text" name="mymob" placeholder="Enter mob number">
+
+        <button id="adduser">Submit</button>
+
+    </form>
+    <ul id="itemlist"></ul>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.4/axios.min.js"></script>
+    <script > 
+    
+      function addUser(event) {
+           
+        event.preventDefault();
+        let Name =event.target.myname.value;
+        let Email = event.target.myemail.value;
+        let Num = event.target.mymob.value;
+
+
+        let obj = {
+          Name,
+          Email,
+          Num,
+        };
+        axios.post("https://crudcrud.com/api/97361f352c5e4cd2b1dee2760acb840f/appointmentdata",obj)
+        .then((response)=>{
+            showdataonscreen(response.data);
+            console.log(response);
+        })
+        .catch((error)=>{
+           console.log(error);
+        })
+
+        // localStorage.setItem(obj.Email, JSON.stringify(obj));
+
+        // showdataonscreen(obj);
+    }
+
+    function showdataonscreen(obj) {
+        let parent = document.getElementById('itemlist');
+        let child = document.createElement('li');
+        let deleteBtn=document.createElement('input');
+        deleteBtn.type='submit';
+        deleteBtn.id='deltebtn';
+        deleteBtn.value='Delete';
+        let editBtn=document.createElement('input');
+        editBtn.type='submit';
+        editBtn.value='Edit';
+
+        child.textContent = obj.Name +' ' +obj.Email+ ' '+obj.Num;
+        deleteBtn.onclick=()=>{
+            localStorage.removeItem(obj.Email);
+            parent.removeChild(child);
+
+        }
+
+        editBtn.onclick=()=>{
+            localStorage.removeItem(obj.Email);
+            parent.removeChild(child);
+        }
+        child.appendChild(deleteBtn);
+        parent.appendChild(child);
+
+        child.appendChild(editBtn);
+        parent.appendChild(child);
+
+       
+    }
+
+   
+
+</script>
+</body>
+
+
+</html>
